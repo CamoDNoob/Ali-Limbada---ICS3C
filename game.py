@@ -12,7 +12,7 @@ pygame.display.set_caption("Moving Square")
 SKY_BLUE = (135, 206, 235)
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
-
+GREEN = (0, 128, 0)
 # Store the player's and enemy's starting position
 player_x = 375
 player_y = 275
@@ -20,6 +20,19 @@ enemy1_x = 100
 enemy1_y = 200
 enemy2_x = 500
 enemy2_y = 400
+
+
+
+bomb_active = False
+bomb_x = player_x
+bomb_y = player_y
+bomb_speed = 6  
+
+
+bomb_dx = 0
+bomb_dy = 0
+#Track kills
+kill_count = 0
 
 #Draw the bullet on top of the player
 bullet_x = player_x
@@ -133,17 +146,20 @@ while running:
     enemy_rect = pygame.Rect(enemy1_x, enemy1_y, 30, 30)
     enemy_rect_two = pygame.Rect(enemy2_x, enemy2_y, 30, 30)
     bullet_rect = pygame.Rect(bullet_x, bullet_y, 15, 15)
-
+    bomb_rect = pygame.Rect(bomb_x, bomb_y, 40, 40)
     # 2. Check if the rectangles overlap (collision)
     if player_rect.colliderect(enemy_rect):
         running = False  # Ends the game loop
-
+    if player_rect.colliderect(enemy_rect_two):
+        running = False
     # NEW: only count a hit if the bullet is active, and remove it on impact
     if bullet_active and bullet_rect.colliderect(enemy_rect):
+        kill_count += 1
         enemy1_x = random.randint(0,800)
         enemy1_y = random.randint(0,600)
         bullet_active = False
     if bullet_active and bullet_rect.colliderect(enemy_rect_two):
+        kill_count += 1
         enemy2_x = random.randint(0,800)
         enemy2_y = random.randint(0,800)
         bullet_active = False
@@ -151,9 +167,28 @@ while running:
     # Draw the player and enemy on top of the background
     pygame.draw.rect(screen, BLUE, (player_x, player_y, 50, 50))
     pygame.draw.rect(screen, RED, (enemy1_x, enemy1_y, 30, 30))
-    pygame.draw.rect(screen, RED, (enemy2_x, enemy2_y, 30, 30))
+    pygame.draw.rect(screen, GREEN, (enemy2_x, enemy2_y, 30, 30))
 
-    # Show the updated screen
+   
+    font = pygame.font.SysFont(None,15)
+    kill_count_text = font.render(f"Kills: {kill_count}", True, (0,0,0))
+    screen.blit(kill_count_text,(10,10))
+
+    if kill_count == 2:
+        if keys[pygame.K_e]:
+            if not bomb_active:
+                            # Reset bullet position to the player's position when fired
+                bomb_x = player_x + 17  # roughly centres the bullet on the player
+                bomb_y = player_y + 17
+                    # NEW: lock in the direction the player is facing
+                bomb_dx = facing_y * bullet_speed
+                bomb_dy = facing_x * bullet_speed
+                bomb_active = True
+        if bomb_active:
+            pygame.draw.rect(screen, BLUE, (bullet_x, bullet_y, 40, 40))  # Bomb drawing    
+            bomb_x += bomb_dx
+            bomb_y += bomb_dy
+       
     pygame.display.flip()
 
     # Cap the game at 60 frames per second
