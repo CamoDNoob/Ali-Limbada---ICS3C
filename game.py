@@ -163,14 +163,23 @@ while running:
         enemy2_x = random.randint(0,800)
         enemy2_y = random.randint(0,800)
         bullet_active = False
-
+    if bomb_active and bomb_rect.colliderect(enemy_rect):
+        kill_count += 1
+        enemy1_x = random.randint(0,800)
+        enemy1_y = random.randint(0,600)
+        bomb_active = False
+    if bomb_active and bomb_rect.colliderect(enemy_rect_two):
+        kill_count += 1
+        enemy2_x = random.randint(0,800)
+        enemy2_y = random.randint(0,800)
+        bomb_active = False
     # Draw the player and enemy on top of the background
     pygame.draw.rect(screen, BLUE, (player_x, player_y, 50, 50))
     pygame.draw.rect(screen, RED, (enemy1_x, enemy1_y, 30, 30))
     pygame.draw.rect(screen, GREEN, (enemy2_x, enemy2_y, 30, 30))
 
    
-    font = pygame.font.SysFont(None,15)
+    font = pygame.font.SysFont(None,25)
     kill_count_text = font.render(f"Kills: {kill_count}", True, (0,0,0))
     screen.blit(kill_count_text,(10,10))
 
