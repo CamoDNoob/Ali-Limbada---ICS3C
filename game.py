@@ -1,5 +1,13 @@
 import pygame, random
 
+
+def enemy1 (enemies,player):
+        for enemy1 in enemies:
+            if player.colliderect(enemy1):
+                running = True
+        return False
+
+
 pygame.init()
 
 # Create the game window
@@ -52,10 +60,7 @@ speed = 3
 enemy1_speed = 1
 enemy2_speed = 0.5
 
-
-
-#function for enemy1
-
+enemies = []
 # Keep the game running
 running = True
 
@@ -140,6 +145,11 @@ while running:
             bomb_dy = facing_y * bomb_speed
             bomb_active = True
 
+
+    
+
+    
+
     # 4. UPDATE BOMB POSITION
     if bomb_active:
         bomb_x += bomb_dx
@@ -161,17 +171,24 @@ while running:
 
     # Create rectangle objects for collisions
     player_rect = pygame.Rect(player_x, player_y, 50, 50)
-    enemy_rect = pygame.Rect(enemy1_x, enemy1_y, 30, 30)
+    enemy_rect_one = pygame.Rect(enemy1_x, enemy1_y, 40, 40)
     enemy_rect_two = pygame.Rect(enemy2_x, enemy2_y, 30, 30)
     bullet_rect = pygame.Rect(bullet_x, bullet_y, 15, 15)
     bomb_rect = pygame.Rect(bomb_x, bomb_y, 40, 40)
+    if enemy_rect_one in enemies == False:
+        enemies.append(enemy_rect_one)
+    if enemy_rect_two in enemies == False:
+        enemies.append(enemy_rect_two)
+
+
+
 
     # Check if the player collides with enemies
-    if player_rect.colliderect(enemy_rect) or player_rect.colliderect(enemy_rect_two):
+    if player_rect.colliderect(enemy_rect_one) or player_rect.colliderect(enemy_rect_two):
         running = False  
 
     # Bullet collisions
-    if bullet_active and bullet_rect.colliderect(enemy_rect):
+    if bullet_active and bullet_rect.colliderect(enemy_rect_one):
         kill_count += 1
         enemy1_x = random.randint(0, 800)
         enemy1_y = random.randint(0, 600)
@@ -183,7 +200,7 @@ while running:
         bullet_active = False
 
     # Bomb collisions
-    if bomb_active and bomb_rect.colliderect(enemy_rect):
+    if bomb_active and bomb_rect.colliderect(enemy_rect_one):
         kill_count += 1
         enemy1_x = random.randint(0, 800)
         enemy1_y = random.randint(0, 600)
@@ -192,14 +209,15 @@ while running:
         enemy2_x = random.randint(0, 800)
         enemy2_y = random.randint(0, 800)
 
-
+    if enemy1(enemies,player_rect) == True:
+        quit()
 
 
     
 
     # Draw the player and enemies
     pygame.draw.rect(screen, BLUE, (player_x, player_y, 50, 50))
-    pygame.draw.rect(screen, RED, (enemy1_x, enemy1_y, 30, 30))
+    pygame.draw.rect(screen, RED, (enemy1_x, enemy1_y, 40, 40))
     pygame.draw.rect(screen, GREEN, (enemy2_x, enemy2_y, 30, 30))
 
     # Render kill count text
