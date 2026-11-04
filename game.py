@@ -6,6 +6,7 @@ def enemy1 (enemies,player):
             if player.colliderect(enemy1):
                 running = True
         return False
+    
 
 
 pygame.init()
@@ -29,7 +30,8 @@ enemy1_x = 100
 enemy1_y = 200
 enemy2_x = 500
 enemy2_y = 400
-
+enemy3_x = 200
+enemy3_y = 100
 # Bomb variables
 bomb_active = False
 bomb_x = player_x
@@ -58,7 +60,7 @@ facing_y = -1  # player starts facing up
 # Control how many pixels the square moves each frame
 speed = 3
 enemy1_speed = 1
-enemy2_speed = 0.5
+enemy2_speed = 1.5
 
 enemies = []
 # Keep the game running
@@ -137,7 +139,7 @@ while running:
             bullet_active = False
 
     # 3. HANDLE BOMB INPUT (Available when kill_count is 2 or more)
-    if kill_count >= 2:
+    if kill_count >= 10:
         if keys[pygame.K_e] and not bomb_active:
             bomb_x = player_x + 5  # centers the 40x40 bomb roughly on the player
             bomb_y = player_y + 5
@@ -190,27 +192,37 @@ while running:
     # Bullet collisions
     if bullet_active and bullet_rect.colliderect(enemy_rect_one):
         kill_count += 1
-        enemy1_x = random.randint(0, 800)
+        enemy1_x = random.randint(795, 800)
         enemy1_y = random.randint(0, 600)
         bullet_active = False
     if bullet_active and bullet_rect.colliderect(enemy_rect_two):
         kill_count += 1
-        enemy2_x = random.randint(0, 800)
+        enemy2_x = random.randint(0, 2)
         enemy2_y = random.randint(0, 800)
         bullet_active = False
 
     # Bomb collisions
     if bomb_active and bomb_rect.colliderect(enemy_rect_one):
         kill_count += 1
-        enemy1_x = random.randint(0, 800)
+        enemy1_x = random.randint(795, 800)
         enemy1_y = random.randint(0, 600)
     if bomb_active and bomb_rect.colliderect(enemy_rect_two):
         kill_count += 1
-        enemy2_x = random.randint(0, 800)
+        enemy2_x = random.randint(0, 2)
         enemy2_y = random.randint(0, 800)
 
     if enemy1(enemies,player_rect) == True:
         quit()
+
+
+
+
+
+    if kill_count >= 2:
+        pygame.draw.rect(screen, RED, (enemy3_x, enemy3_y, 40, 40))
+
+        
+
 
 
     
