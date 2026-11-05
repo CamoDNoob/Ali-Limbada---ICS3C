@@ -30,13 +30,13 @@ enemy1_x = 100
 enemy1_y = 200
 enemy2_x = 500
 enemy2_y = 400
-enemy3_x = 200
-enemy3_y = 100
+enemy3_x = 400
+enemy3_y = 600
 # Bomb variables
 bomb_active = False
 bomb_x = player_x
 bomb_y = player_y
-bomb_speed = 2  # Set to a low number so it moves very slowly
+bomb_speed = 4 # Set to a low number so it moves very slowly
 bomb_dx = 0
 bomb_dy = 0
 
@@ -61,6 +61,7 @@ facing_y = -1  # player starts facing up
 speed = 3
 enemy1_speed = 1
 enemy2_speed = 1.5
+enemy3_speed = 1
 
 enemies = []
 # Keep the game running
@@ -120,6 +121,15 @@ while running:
         enemy2_y += enemy2_speed
     elif enemy2_y > player_y:
         enemy2_y -= enemy2_speed
+
+    if enemy3_x < player_x:
+        enemy3_x += enemy3_speed
+    elif enemy3_x > player_x:
+        enemy3_x -= enemy3_speed
+    if enemy3_y < player_y:
+        enemy3_y += enemy3_speed
+    elif enemy3_y > player_y:
+        enemy3_y -= enemy3_speed
     
     # 1. HANDLE BULLET INPUT
     if keys[pygame.K_SPACE]:
@@ -175,6 +185,7 @@ while running:
     player_rect = pygame.Rect(player_x, player_y, 50, 50)
     enemy_rect_one = pygame.Rect(enemy1_x, enemy1_y, 40, 40)
     enemy_rect_two = pygame.Rect(enemy2_x, enemy2_y, 30, 30)
+    enemy_rect_three = pygame.Rect(enemy3_x, enemy3_y, 40, 40)
     bullet_rect = pygame.Rect(bullet_x, bullet_y, 15, 15)
     bomb_rect = pygame.Rect(bomb_x, bomb_y, 40, 40)
     if enemy_rect_one in enemies == False:
@@ -186,7 +197,7 @@ while running:
 
 
     # Check if the player collides with enemies
-    if player_rect.colliderect(enemy_rect_one) or player_rect.colliderect(enemy_rect_two):
+    if player_rect.colliderect(enemy_rect_one) or player_rect.colliderect(enemy_rect_two) or player_rect.colliderect(enemy_rect_three):
         running = False  
 
     # Bullet collisions
@@ -200,7 +211,11 @@ while running:
         enemy2_x = random.randint(0, 2)
         enemy2_y = random.randint(0, 800)
         bullet_active = False
-
+    if bullet_active and bullet_rect.colliderect(enemy_rect_three):
+        kill_count += 1
+        enemy3_x = random.randint(0, 800)
+        enemy3_y = random.randint(600,600)
+        bullet_active = False
     # Bomb collisions
     if bomb_active and bomb_rect.colliderect(enemy_rect_one):
         kill_count += 1
@@ -210,6 +225,10 @@ while running:
         kill_count += 1
         enemy2_x = random.randint(0, 2)
         enemy2_y = random.randint(0, 800)
+    if bomb_active and bomb_rect.colliderect(enemy_rect_three):
+        kill_count += 1
+        enemy3_x = random.randint(0, 800)
+        enemy3_y = random.randint (600, 600)
 
     if enemy1(enemies,player_rect) == True:
         quit()
@@ -220,6 +239,7 @@ while running:
 
     if kill_count >= 2:
         pygame.draw.rect(screen, RED, (enemy3_x, enemy3_y, 40, 40))
+
 
         
 
