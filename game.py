@@ -1,5 +1,5 @@
 import pygame, random
-
+from button import Button
 
 def enemy1 (enemies,player):
         for enemy1 in enemies:
@@ -7,13 +7,18 @@ def enemy1 (enemies,player):
                 running = True
         return False
     
+def get_font(size): # Returns Press-Start-2P in the desired size
+    return pygame.font.Font("assets/font.ttf", size)
+
 
 
 pygame.init()
 
 # Create the game window
+SCREEN = pygame.display.set_mode((800, 600))
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
+BG = pygame.image.load("Gta 6.jpg").convert()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Moving Square")
 
@@ -23,6 +28,7 @@ BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 GREEN = (0, 128, 0)
 GREY = (169,169,169)
+BLACK = (0, 0, 0)
 # Store the player's and enemy's starting position
 player_x = 375
 player_y = 275
@@ -39,6 +45,30 @@ bomb_y = player_y
 bomb_speed = 4 # Set to a low number so it moves very slowly
 bomb_dx = 0
 bomb_dy = 0
+
+# used Youtube video 
+#https://youtu.be/GMBqjxcKogA?si=lZn0jbuqHN_BUS7O
+def draw_menu_screen():
+    pygame.display.set_caption(" Menu ")
+
+    while True:
+        SCREEN.blit(BG, (0, 0))
+
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        MENU_TEXT = get_font(100).render("MAIN MENU", True, "#b68f40")
+        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+
+
+
+
+
+
+
+
+
+
+
 
 # Track kills
 kill_count = 0
