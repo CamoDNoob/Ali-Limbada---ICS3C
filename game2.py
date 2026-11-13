@@ -13,7 +13,7 @@ def draw_button(rect, text, mouse_pos, font_size=50):
     button_text_rect = button_text.get_rect(center=rect.center)
     SCREEN.blit(button_text, button_text_rect)
 
-
+#
 def options():
     back_rect = pygame.Rect(250, 420, 300, 80)
 
@@ -101,6 +101,7 @@ CLOCK = pygame.time.Clock()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 BG = pygame.image.load("Background.png").convert()
+LOSE_JUMPSCARE = pygame.image.load("BrimSquare")
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Moving Square")
 
@@ -127,20 +128,6 @@ bomb_y = player_y
 bomb_speed = 4 # Set to a low number so it moves very slowly
 bomb_dx = 0
 bomb_dy = 0
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def game():
     global player_x, player_y, enemy1_x, enemy1_y
@@ -262,12 +249,7 @@ def game():
                 bomb_y = player_y + 5
                 bomb_dx = facing_x * bomb_speed
                 bomb_dy = facing_y * bomb_speed
-                bomb_active = True
-
-
-        
-
-        
+                bomb_active = True   
 
         # 4. UPDATE BOMB POSITION
         if bomb_active:
@@ -299,8 +281,6 @@ def game():
             enemies.append(enemy_rect_one)
         if enemy_rect_two in enemies == False:
             enemies.append(enemy_rect_two)
-
-
 
 
         # Check if the player collides with enemies
@@ -339,9 +319,6 @@ def game():
 
         if enemy1(enemies,player_rect) == True:
             quit()
-
-
-
 
 
         if kill_count >= 2:
